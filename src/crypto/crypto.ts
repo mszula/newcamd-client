@@ -1,5 +1,6 @@
 import { randomBytes } from 'crypto';
 import { pipe } from '../helpers/pipe';
+import { Key } from '../key/types';
 import { DES_BLOCK_SIZE } from './const';
 import {
   addChecksum,
@@ -7,7 +8,13 @@ import {
   addRandomPad,
   prependWithLength,
   tripleDes,
-} from './helper';
+} from './crypt-helpers';
+import {
+  checkLength,
+  decryptTripleDes,
+  checkChecksum,
+  skipNetData,
+} from './decrypt-helpers';
 
 const prepareKey = (key: Buffer): Buffer => {
   if (key.length == 16) {
@@ -17,13 +24,23 @@ const prepareKey = (key: Buffer): Buffer => {
   return key;
 };
 
-export const encrypt = (message: Buffer, key: Buffer): Buffer => {
+export const encrypt = (message: Buffer, key: Key): Buffer => {
   return pipe(
     message,
     addNetBuff,
     addRandomPad,
     addChecksum,
-    tripleDes(prepareKey(key), randomBytes(DES_BLOCK_SIZE)),
+    tripleDes(prepareKey(key.body), randomBytes(DES_BLOCK_SIZE)),
     prependWithLength,
+  );
+};
+
+export const decrypt = (message: Buffer, key: Key): Buffer => {
+  return pipe(
+    message,
+    checkLength,
+    decryptTripleDes(prepareKey(key.body)),
+    checkChecksum,
+    skipNetData,
   );
 };

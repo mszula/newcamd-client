@@ -1,4 +1,4 @@
-import { createLoginKey } from './key';
+import { createLoginKey, createSessionKey } from './key';
 
 describe('Login key', () => {
   it('should retrun propperly prepared login key', () => {
@@ -26,6 +26,11 @@ describe('Login key', () => {
     ).toEqual({
       type: 'login-key',
       body: Buffer.from('008080604028180e0804440210904c28', 'hex'),
+    });
+
+    expect(createSessionKey('test', '0102030405060708091011121314')).toEqual({
+      type: 'session-key',
+      body: Buffer.from('301eccaeb608941c1a20504030083402', 'hex'),
     });
   });
 });

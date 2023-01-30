@@ -1,10 +1,10 @@
 import { Socket } from 'net';
-import { client } from './client';
-import { Client, NewcamdConnectConfig } from './types';
+import { login } from './login';
+import { Connection, NewcamdConnectConfig } from './types';
 
 export const connect = (
   newcamdConnectConfig: NewcamdConnectConfig,
-): Promise<Client> => {
+): Promise<Connection> => {
   const socket = new Socket();
 
   socket.connect({
@@ -15,13 +15,16 @@ export const connect = (
 
   return new Promise((resolve, reject) => {
     socket.once('data', (initialMessage) => {
-      resolve(
-        client(
+      resolve({
+        login: login(
           socket,
           { type: 'initial', body: initialMessage },
-          newcamdConnectConfig,
+          newcamdConnectConfig.desKey,
         ),
-      );
+        close: () => {
+          socket.destroy();
+        },
+      });
     });
 
     socket.once('end', () => reject('Unable to connect to Newcamd server'));
@@ -30,13 +33,3 @@ export const connect = (
     );
   });
 };
-
-connect({
-  host: '127.0.0.1',
-  port: 1234,
-  desKey: '0102030405060708091011121314',
-}).then((client) => {
-  client
-    .login({ username: 'test', password: 'test' })
-    .then((a) => client.close());
-});

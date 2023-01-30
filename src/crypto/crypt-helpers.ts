@@ -1,5 +1,5 @@
 import { randomBytes, createCipheriv } from 'crypto';
-import { DES_BLOCK_SIZE } from './const';
+import { DES_BLOCK_SIZE, CIPHER_ALGORITHM } from './const';
 
 export const addNetBuff = (message: Buffer): Buffer => {
   const len = message.length;
@@ -30,9 +30,9 @@ export const tripleDes =
     let iv: Buffer = firstIv;
 
     for (let i = 0; i < message.length; i += DES_BLOCK_SIZE) {
-      iv = createCipheriv('des-ede3-cbc', key, iv).update(
-        message.subarray(i, i + DES_BLOCK_SIZE),
-      );
+      iv = createCipheriv(CIPHER_ALGORITHM, key, iv)
+        .setAutoPadding(false)
+        .update(message.subarray(i, i + DES_BLOCK_SIZE));
       cryptedMessage = Buffer.concat([cryptedMessage, iv]);
     }
     return Buffer.concat([cryptedMessage, firstIv]);

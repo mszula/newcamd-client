@@ -32,12 +32,12 @@ export const createSessionKey = (
   ),
 });
 
-const xorKeys = (initialMessage: Buffer, desKey: Buffer): Buffer => {
-  const length = desKey.length;
-  const loginKey = Buffer.alloc(length);
+const xorKeys = (base: Buffer, toXor: Buffer): Buffer => {
+  const length = toXor.length;
+  const loginKey = Buffer.alloc(14, base);
 
   for (let i = 0; i < length; ++i) {
-    loginKey[i] = initialMessage[i] ^ desKey[i];
+    loginKey[i % 14] = loginKey[i % 14] ^ toXor[i];
   }
 
   return loginKey;

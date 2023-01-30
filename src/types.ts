@@ -1,6 +1,17 @@
-export type Client = {
-  login: (NewcamdloginConfig: NewcamdLoginConfig) => Promise<boolean>;
+export type Connection = {
+  login: (NewcamdloginConfig: NewcamdLoginConfig) => Promise<LoginResponse>;
   close: () => void;
+};
+
+export enum LoginStatus {
+  OK,
+  WRONG_LOGIN_OR_PASSWORD,
+}
+
+export type LoginResponse = {
+  status: LoginStatus;
+  reason?: string;
+  messageId: '\xe1' | '\xe2';
 };
 
 export type NewcamdConnectConfig = {
@@ -16,16 +27,6 @@ export type NewcamdLoginConfig = {
 
 export type InitialMessage = {
   type: 'initial';
-  body: Buffer;
-};
-
-export type LoginKey = {
-  type: 'login-key';
-  body: Buffer;
-};
-
-export type SessionKey = {
-  type: 'session-key';
   body: Buffer;
 };
 

@@ -1,6 +1,5 @@
-import { encrypt } from './crypto';
-import { createCipheriv } from 'crypto';
-import { addChecksum, addNetBuff, addRandomPad } from './helper';
+import { decrypt, encrypt } from './crypto';
+import { addChecksum, addNetBuff, addRandomPad } from './crypt-helpers';
 import { pipe } from '../helpers/pipe';
 
 const loginMessage = Buffer.from(
@@ -9,18 +8,19 @@ const loginMessage = Buffer.from(
 );
 
 describe('Crypto', () => {
-  beforeAll(async () => {
+  beforeAll(() => {
     jest
-      .spyOn(await import('crypto'), 'randomBytes')
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      .spyOn(require('crypto'), 'randomBytes')
       .mockImplementation((len: number) => Buffer.from('a'.repeat(len)));
   });
 
   it('should crypt data', () => {
     expect(
-      encrypt(
-        loginMessage,
-        Buffer.from('962e24d2ea5ab8a45eca9c50c6147834', 'hex'),
-      ),
+      encrypt(loginMessage, {
+        type: 'login-key',
+        body: Buffer.from('962e24d2ea5ab8a45eca9c50c6147834', 'hex'),
+      }),
     ).toEqual(
       Buffer.from(
         '00405baee2f1fe9f32f566d868de2c82c9460a4ed9041f516a75ffefbb50d233d4091dbd28311f0fc380fca0530f42926c79f950f8ad6066977d6161616161616161',
@@ -28,10 +28,10 @@ describe('Crypto', () => {
       ),
     );
     expect(
-      encrypt(
-        loginMessage,
-        Buffer.from('482c3014bc8ac45eaec28cacf2dcc008', 'hex'),
-      ),
+      encrypt(loginMessage, {
+        type: 'login-key',
+        body: Buffer.from('482c3014bc8ac45eaec28cacf2dcc008', 'hex'),
+      }),
     ).toEqual(
       Buffer.from(
         '0040ea33bfb0945e5ba8418b54f1a05cc0f3ce53002731e43cb9850ccbc71c36009418e0df611079dd027ea9ae67607d8b3515944c6cb2b5003b6161616161616161',
@@ -67,13 +67,18 @@ describe('Crypto', () => {
     );
   });
 
-  it('should cipher', () => {
-    const cipher = createCipheriv(
-      'des-ede3-cbc',
-      'aaaaaaaaaaaaaaaaaaaaaaaa',
-      'aaaaaaaa',
-    );
-    const a = cipher.update('0000000000000000');
-    expect(a).toEqual(Buffer.from('ea7aa7b63a976555b1988e1c0b288045', 'hex'));
+  it('should decrypt data', () => {
+    expect(
+      decrypt(
+        Buffer.from(
+          '0018ddba351167304572a45f978708d99edba45ab287b1571427',
+          'hex',
+        ),
+        {
+          type: 'login-key',
+          body: Buffer.from('da368c7cba28b4fed4ecdca83abec890', 'hex'),
+        },
+      ),
+    ).toEqual(Buffer.from('e100007a811a', 'hex'));
   });
 });
