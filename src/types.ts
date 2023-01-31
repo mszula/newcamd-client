@@ -1,17 +1,15 @@
 export type Connection = {
-  login: (NewcamdloginConfig: NewcamdLoginConfig) => Promise<LoginResponse>;
+  login: (NewcamdloginConfig: NewcamdLoginConfig) => Promise<Client>;
   close: () => void;
 };
 
-export enum LoginStatus {
-  OK,
-  WRONG_LOGIN_OR_PASSWORD,
-}
+export type Client = {
+  getCard: () => Promise<Card>;
+};
 
-export type LoginResponse = {
-  status: LoginStatus;
-  reason?: string;
-  messageId: '\xe1' | '\xe2';
+export type Card = {
+  caid: string;
+  providers: string[];
 };
 
 export type NewcamdConnectConfig = {
