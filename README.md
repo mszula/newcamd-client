@@ -24,7 +24,7 @@ const client = await connection.login({
   password: 'test',
   desKey: '0102030405060708091011121314',
 });
-const card = await client.getCard();
+const card = await client.getCard(); // { caid: '4326', providers: [ '001234', '009876' ] }
 
 connection.close();
 ```
