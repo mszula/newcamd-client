@@ -15,12 +15,13 @@ export type Card = {
 export type NewcamdConnectConfig = {
   host: string;
   port: number;
-  desKey: string;
+  logger?: Logger;
 };
 
 export type NewcamdLoginConfig = {
   username: string;
   password: string;
+  desKey: string;
 };
 
 export type InitialMessage = {
@@ -28,4 +29,7 @@ export type InitialMessage = {
   body: Buffer;
 };
 
-export type Logger = Pick<Console, 'warn' | 'info' | 'error' | 'log'>;
+export type Logger = Pick<
+  Console,
+  'warn' | 'info' | 'error' | 'trace' | 'debug'
+>;

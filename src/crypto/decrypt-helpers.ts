@@ -34,7 +34,7 @@ export const checkChecksum = (message: Buffer): Buffer => {
   }
 
   if (checksum !== 0) {
-    new Error('Incorrect response message checksum. Check your connection.');
+    new Error('Incorrect response message checksum! Check your connection.');
   }
 
   return message;
