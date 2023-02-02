@@ -51,6 +51,7 @@ export const connect = (
       resolve({
         login: login(socket, logger)({ type: 'initial', body: initialMessage }),
         close: () => {
+          logger.debug('Closing connection... Bye!');
           socket.destroy();
         },
       });

@@ -12,6 +12,8 @@ export const getClient = (
   desKey: NewcamdLoginConfig['desKey'],
 ): Client => {
   const sessionKey = createSessionKey(password, desKey);
+  logger.debug(`Login 3DES session key is ${sessionKey.body.toString('hex')}`);
+
   return {
     getCard: getCard(socket, logger, sessionKey),
   };
@@ -26,7 +28,11 @@ export const getCard =
         resolve(card);
       }
       socket.once('data', (data) => {
+        logger.debug(
+          `Received card data response: ${data.toString('hex')} Decrypting...`,
+        );
         const cardData = decrypt(data, sessionKey);
+        logger.debug(`Card data: ${cardData.toString('hex')}`);
         const providers: string[] = [];
         for (let i = 0; i < cardData[14]; i++) {
           providers.push(
@@ -41,5 +47,12 @@ export const getCard =
         resolve(card);
       });
 
-      socket.write(encrypt(getMessage().body, sessionKey));
+      const message = getMessage();
+      logger.debug(
+        `Card request is: ${message.body.toString('ascii')}. Encrypting...`,
+      );
+      const encryptedMessage = encrypt(message.body, sessionKey);
+      logger.debug(`Encrypted message: ${encryptedMessage.toString('hex')}`);
+
+      socket.write(encryptedMessage);
     });

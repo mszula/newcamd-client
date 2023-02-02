@@ -10,7 +10,7 @@ npm install newcamd-client
 
 ## How to
 
-There are implemented of a few methods which they are able to perform within Newcamd server.
+There are implemented a few methods which they are able to perform within Newcamd server.
 
 ```ts
 import { connect } from 'newcamd-client';
@@ -29,15 +29,13 @@ const card = await client.getCard();
 connection.close();
 ```
 
-The code snipped above able to connect to server, log in and get card info (caid and providers list).
+The code snipped above is able to connect to a server, log in and get card info (caid and providers list).
 
 ## Logger
 
-The `connect` method allow to pass a logger with able to follow the communication with server. The logger can be any object with `error`, `warn`, `info`, `debug`, `trace` functionsm like [Pino](https://github.com/pinojs/pino) or just `console`.
+The `connect` method allows passing a logger witch able to follow the communication with the server. The logger can [Pino](https://github.com/pinojs/pino), `console` or any object with `error`, `warn`, `info`, `debug`, `trace` functions.
 
 ```ts
-import { connect } from 'newcamd-client';
-
 const connection = await connect({
   host: '127.0.0.1',
   port: 1234,
@@ -45,18 +43,24 @@ const connection = await connect({
 });
 ```
 
-The output should looks like below
+The output for the whole process like above should look like this:
 
 > Connecting to Newcamd server 127.0.0.1:1234
 > Successfully connected to server. Waiting for initial message...
-> Received initial message: 27b5770bcb9b75671b957b26e216
+> Received initial message: 96f69122046bddbfd25a50ad7651
 > Trying to log in using test and given password...
-> Login 3DES key is: 265adc80fc7474e46e88a0aca2a6c404
+> Login 3DES key is: 96fa2444600ab6b4b6ecd2481afa948a
 > Loggin message is: `test$1$abcdefgh$irWbblnpmw.5z7wgBnprh0. Encrypting...
-> Encrypted message: 00403a0a05ab282b587431f13b48756357ee72d6f25a04b94d1b82b41a15d231e5ed84e5753fa4b431d559c3fea437613173f71b963b3cf01b3fb1de2c39d00207a7
-> Received login response: 00189cf562b85de9d3f3028d119067de2cbf2ab5fdf6a679f4e7 Decrypting...
-> Login response: e10000596dd5
+> Encrypted message: 0040cba3d1070410955310522d2cabda3eda4397c3d06b75744908887c68b2e99b7a0c0214f2eaa72a4eaf9c8016d2c179a543b8717ee54da8edd97ac983f518d982
+> Received login response: 00189028c2e4c769051d47253f0a16197aab2c4cefb0139cd4c2 Decrypting...
+> Login response: e10000453296
 > Login successfull!
+> Login 3DES session key is 301eccaeb608941c1a20504030083402
+> Card request is: c. Encrypting...
+> Encrypted message: 00184a51c3f8b0c73cd3804c881c654e64f76822a4a7204f5617
+> Received card data response: 00380fb934729bf11bc64462b5d9d6e10b21d33d56f2e081f667a37e7157cfed0d13da9f207a13a0e3b05cb9d0b4e41c88798409e37c22662d5f Decrypting...
+> Card data: e400220b43260000000000000000020012340000000000000000009876000000000000000062
+> Closing connection... Bye!
 
 ## Why
 
