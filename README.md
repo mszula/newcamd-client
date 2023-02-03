@@ -33,7 +33,7 @@ The code snipped above is able to connect to a server, log in and get card info 
 
 ## Logger
 
-The `connect` method allows passing a logger witch able to follow the communication with the server. The logger can [Pino](https://github.com/pinojs/pino), `console` or any object with `error`, `warn`, `info`, `debug`, `trace` functions.
+The `connect` method allows passing a logger witch able to follow the communication with the server. The logger can be [Pino](https://github.com/pinojs/pino), `console` or any object with `error`, `warn`, `info`, `debug`, `trace` functions.
 
 ```ts
 const connection = await connect({
