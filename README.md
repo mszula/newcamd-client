@@ -43,7 +43,7 @@ const connection = await connect({
 });
 ```
 
-The output for the whole process like above should look like this:
+The output for the whole process like in the first snippet should look like this:
 
 ```text
 Connecting to Newcamd server 127.0.0.1:1234
