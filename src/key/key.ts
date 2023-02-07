@@ -1,15 +1,11 @@
 import { pipe } from '../helpers/pipe';
 import { hashPassword } from '../message/login';
-import {
-  InitialMessage,
-  NewcamdConnectConfig,
-  NewcamdLoginConfig,
-} from '../types';
+import { InitialMessage, NewcamdLoginConfig } from '../types';
 import { LoginKey, SessionKey } from './types';
 
 export const createLoginKey = (
   initialMessage: InitialMessage,
-  stringDesKey: NewcamdConnectConfig['desKey'],
+  stringDesKey: NewcamdLoginConfig['desKey'],
 ): LoginKey => ({
   type: 'login-key',
   body: pipe(
@@ -20,7 +16,7 @@ export const createLoginKey = (
 
 export const createSessionKey = (
   password: NewcamdLoginConfig['password'],
-  stringDesKey: NewcamdConnectConfig['desKey'],
+  stringDesKey: NewcamdLoginConfig['desKey'],
 ): SessionKey => ({
   type: 'session-key',
   body: pipe(
