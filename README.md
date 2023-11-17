@@ -2,6 +2,12 @@
 
 Implementation of client Newcamd protocol.
 
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/mszula/newcamd-client/npm-publish.yml)
+![npm](https://img.shields.io/npm/dt/newcamd-client)
+![NPM](https://img.shields.io/npm/l/newcamd-client)
+![npm](https://img.shields.io/npm/v/newcamd-client)
+![GitHub Repo stars](https://img.shields.io/github/stars/mszula/newcamd-client)
+
 ## Installation
 
 ```sh
